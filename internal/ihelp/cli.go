@@ -1,4 +1,4 @@
-package game
+package ihelp
 
 import (
 	"bufio"
@@ -9,14 +9,14 @@ import (
 )
 
 // Ввод значений в терминале.
-func input(promt string, r *bufio.Reader) string {
+func Input(promt string, r *bufio.Reader) string {
 	fmt.Print(promt)
 	answer, _ := r.ReadString('\n')
 
 	return strings.TrimSpace(answer)
 }
 
-func radio(label string, opts []string) string {
+func Radio(label string, opts []string) string {
 	var res string
 	prompt := &survey.Select{
 		Message: label,

@@ -1,8 +1,8 @@
-package game
+package igame
 
 import (
 	"fmt"
-	"math/rand"
+	"rooms/internal/iunit"
 	"strconv"
 
 	"github.com/fatih/color"
@@ -10,26 +10,26 @@ import (
 
 type room struct {
 	number  uint
-	player  *player
-	monster monster
+	player  *iunit.Player
+	monster iunit.Monster
 	round   round
 }
 
-func (r *room) start(p *player) {
+func (r *room) start(p *iunit.Player) {
 	r.player = p
 
-	for r.monster.isAlive() && r.player.isAlive() {
+	for r.monster.IsAlive() && r.player.IsAlive() {
 		r.toNextRound()
 	}
 
-	if !r.monster.isAlive() {
+	if !r.monster.IsAlive() {
 		fmt.Println()
-		color.Red("%v помер", r.monster.name)
+		color.Red("%v помер", r.monster.GetName())
 	}
 
-	if !r.player.isAlive() {
+	if !r.player.IsAlive() {
 		fmt.Println()
-		color.Red("%v помер", r.player.name)
+		color.Red("%v помер", r.player.GetName())
 	}
 }
 
@@ -37,14 +37,14 @@ func (r *room) toNextRound() {
 	r.round = NewRound(r.round.number + 1)
 	fmt.Println(r.round, "\n")
 
-	r.player.setActions(&r.monster)
-	r.monster.setActions(r.player)
+	r.player.SetActions(&r.monster)
+	r.monster.SetActions(r.player)
 
 	fmt.Println()
 
-	r.player.attack(&r.monster)
-	if r.monster.isAlive() {
-		r.monster.attack(r.player)
+	r.player.Attack(&r.monster)
+	if r.monster.IsAlive() {
+		r.monster.Attack(r.player)
 	}
 }
 
@@ -53,13 +53,13 @@ func (r room) String() string {
 }
 
 func NewRoom(number uint) room {
-	unitProps := units[rand.Intn(len(units))]
+	unitProps := iunit.GetUnit()
 
 	unitHp, _ := strconv.Atoi(unitProps["hp"])
 	unitActions, _ := strconv.Atoi(unitProps["actions"])
 
 	return room{
 		number:  number,
-		monster: NewMonster(unitProps["name"], unitProps["icon"], unitHp, unitActions),
+		monster: iunit.NewMonster(unitProps["name"], unitProps["icon"], unitHp, unitActions),
 	}
 }

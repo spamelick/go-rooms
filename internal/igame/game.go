@@ -1,23 +1,22 @@
-package game
+package igame
 
 import (
-	"bufio"
 	"fmt"
 	"math/rand"
-	"os"
+
+	"rooms/internal/iunit"
 
 	"github.com/fatih/color"
 )
 
-// Игра.
 type game struct {
 	seed   int
 	room   room
-	player player
+	player iunit.Player
 }
 
-func startGame() {
-	game := NewGame()
+func StartGame() {
+	game := newGame()
 
 	color.Cyan("Вы входите в 🏰. Обратной дороги нет...")
 
@@ -27,21 +26,14 @@ func startGame() {
 	fmt.Println()
 }
 
-func confirmStartGame() {
-	reader := bufio.NewReader(os.Stdin)
-	input("Начинаем?", reader)
-	fmt.Println()
-	startGame()
-}
-
 // Инициализация игры.
 // Если передан seed игры, то... создаем с сидом.
-func NewGame(seed ...int) game {
+func newGame(seed ...int) game {
 	if len(seed) == 1 {
 		return loadGame(seed[0])
 	}
 
-	player := NewPlayer(5, 2)
+	player := iunit.NewPlayer(5, 2)
 
 	g := game{
 		seed:   rand.Int(),
@@ -53,7 +45,7 @@ func NewGame(seed ...int) game {
 
 // Начать игру.
 func (g *game) start() {
-	for g.player.isAlive() {
+	for g.player.IsAlive() {
 		fmt.Println()
 		g.startNextRoom()
 	}
@@ -76,5 +68,5 @@ func (g game) getNextRoomNumber() uint {
 // Загрузка игры из сохранения.
 // Пока только в фантазиях.
 func loadGame(_ int) game {
-	return NewGame()
+	return newGame()
 }

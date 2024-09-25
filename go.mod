@@ -1,4 +1,4 @@
-module funelick/rooms
+module rooms
 
 go 1.23.1
 

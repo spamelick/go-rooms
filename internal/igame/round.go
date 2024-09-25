@@ -1,4 +1,4 @@
-package game
+package igame
 
 import "fmt"
 
