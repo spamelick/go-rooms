@@ -1,8 +1,13 @@
 package iunit
 
-import "math/rand"
+import (
+	"fmt"
+	"math/rand"
+)
 
+// -------------------------
 // Справочник монстров.
+// -------------------------
 var units []map[string]string = []map[string]string{
 	{
 		"icon":    "🐗",
@@ -26,4 +31,33 @@ var units []map[string]string = []map[string]string{
 
 func GetUnit() map[string]string {
 	return units[rand.Intn(len(units))]
+}
+
+// -------------------------
+// Части тела.
+// -------------------------
+type BodyPart int
+
+const (
+	Unknown BodyPart = iota
+	Head
+	Chest
+	Leg
+	Tail
+)
+
+var bodyParts map[BodyPart]string = map[BodyPart]string{
+	Unknown: "-",
+	Head:    "Голова",
+	Chest:   "Грудь",
+	Leg:     "Ноги",
+	Tail:    "Хвост",
+}
+
+func (bp BodyPart) String() string {
+	if val, ok := bodyParts[bp]; ok {
+		return val
+	}
+
+	return fmt.Sprintf("BodyPart(%q)", int(bp))
 }

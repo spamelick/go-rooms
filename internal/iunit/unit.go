@@ -5,10 +5,13 @@ import (
 	"slices"
 )
 
+// -------------------------
+// Защищающийся.
+// -------------------------
 type Defender interface {
 	IsAlive() bool
-	Defend(bp string, damage int) int
-	GetBodyParts() []string
+	Defend(bp BodyPart, damage int) int
+	GetBodyParts() []BodyPart
 	GetHp() int
 }
 
@@ -19,9 +22,9 @@ type baseUnit struct {
 	name             string
 	maxHp, currentHp int
 	actions, damage  int
-	bodyParts        []string
-	blocks           []string
-	targets          []string
+	bodyParts        []BodyPart
+	blocks           []BodyPart
+	targets          []BodyPart
 }
 
 func (u *baseUnit) String() string {
@@ -36,34 +39,34 @@ func (u *baseUnit) GetHp() int {
 	return u.currentHp
 }
 
-func (u *baseUnit) GetBodyPart(name string) int {
-	return slices.IndexFunc(u.GetBodyParts(), func(item string) bool {
-		return item == name
+func (u *baseUnit) GetBodyPart(bp BodyPart) int {
+	return slices.IndexFunc(u.GetBodyParts(), func(item BodyPart) bool {
+		return bp == item
 	})
 }
 
 // Части тела.
-func (u *baseUnit) GetBodyParts() []string {
+func (u *baseUnit) GetBodyParts() []BodyPart {
 	return u.bodyParts
 }
 
 // Наличие части тела.
-func (u *baseUnit) HasBodyPart(name string) bool {
-	return u.GetBodyPart(name) != -1
+func (u *baseUnit) HasBodyPart(bp BodyPart) bool {
+	return u.GetBodyPart(bp) != -1
 }
 
 // Проверка наличия блока на часте тела.
-func (u *baseUnit) underBlock(name string) bool {
-	i := slices.IndexFunc(u.blocks, func(item string) bool {
-		return item == name
+func (u *baseUnit) underBlock(bp BodyPart) bool {
+	i := slices.IndexFunc(u.blocks, func(item BodyPart) bool {
+		return bp == item
 	})
 
 	return i != -1
 }
 
 // Блокирование.
-func (u *baseUnit) blockHit(bp string) {
-	i := slices.IndexFunc(u.blocks, func(item string) bool {
+func (u *baseUnit) blockHit(bp BodyPart) {
+	i := slices.IndexFunc(u.blocks, func(item BodyPart) bool {
 		return item == bp
 	})
 
@@ -77,7 +80,7 @@ func (u *baseUnit) IsAlive() bool {
 
 // Обработка повреждения части тела.
 // Возвращается статус успешности атаки.
-func (u *baseUnit) Defend(bp string, damage int) int {
+func (u *baseUnit) Defend(bp BodyPart, damage int) int {
 	if !u.HasBodyPart(bp) {
 		return 0
 	}
@@ -101,8 +104,8 @@ func (u *baseUnit) GetHit(damage int) int {
 }
 
 // Атака части тела.
-func (u *baseUnit) AttackBodyPart(d Defender, bodyPart string) int {
-	return d.Defend(bodyPart, u.damage)
+func (u *baseUnit) AttackBodyPart(d Defender, bp BodyPart) int {
+	return d.Defend(bp, u.damage)
 }
 
 // Полная атака. Зависит от выбранных целей.
@@ -114,9 +117,9 @@ func (m *baseUnit) Attack(d Defender) {
 
 		realDamage := m.AttackBodyPart(d, bodyPart)
 		if realDamage > 0 {
-			fmt.Println("🟢", m, "атакует и попадает по ", bodyPart)
+			fmt.Printf("🟢 %s атакует и попадает по %s\n", m, bodyPart)
 		} else {
-			fmt.Println("🔴", m, "атакует, но промахивается")
+			fmt.Printf("🔴 %s атакует, но промахивается\n", m)
 		}
 	}
 }

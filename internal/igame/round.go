@@ -13,5 +13,5 @@ func NewRound(number uint) round {
 }
 
 func (r round) String() string {
-	return fmt.Sprintf("\n🔷 Раунд #%v", r.number)
+	return fmt.Sprintf("\n🔷 Раунд #%d", r.number)
 }

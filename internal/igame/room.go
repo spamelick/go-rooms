@@ -58,8 +58,10 @@ func NewRoom(number uint) room {
 	unitHp, _ := strconv.Atoi(unitProps["hp"])
 	unitActions, _ := strconv.Atoi(unitProps["actions"])
 
+	monster := iunit.NewMonster(unitProps["name"], unitProps["icon"], unitHp, unitActions, []iunit.BodyPart{iunit.Head, iunit.Chest, iunit.Leg})
+
 	return room{
 		number:  number,
-		monster: iunit.NewMonster(unitProps["name"], unitProps["icon"], unitHp, unitActions),
+		monster: monster,
 	}
 }

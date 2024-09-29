@@ -49,12 +49,12 @@ func (u *Player) SetActions(d Defender) {
 }
 
 func (u *Player) ChooseAttack(d Defender) {
-	answer := ihelp.Radio("Куда атакуем?", d.GetBodyParts())
+	answer := Radio("Куда атакуем?", d.GetBodyParts())
 	u.targets = append(u.targets, answer)
 }
 
 func (u *Player) ChooseDefence() {
-	answer := ihelp.Radio("Что защищаем?", u.GetBodyParts())
+	answer := Radio("Что защищаем?", u.GetBodyParts())
 	u.blocks = append(u.blocks, answer)
 }
 
@@ -65,12 +65,12 @@ func NewPlayer(hp, actions int) Player {
 	c := color.New(color.Underline)
 	return Player{
 		baseUnit: baseUnit{
-			name:      fmt.Sprintf("💩 %v", c.Sprintf("Игрок")),
+			name:      fmt.Sprintf("💩 %s", c.Sprintf("Игрок")),
 			maxHp:     hp,
 			currentHp: hp,
 			damage:    2,
 			actions:   actions,
-			bodyParts: []string{"Голова", "Торс", "Ноги"},
+			bodyParts: []BodyPart{Head, Chest, Leg},
 		},
 	}
 }

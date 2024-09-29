@@ -45,7 +45,7 @@ func (m *Monster) ChooseDefence() {
 // -------------------------
 // Создание монстра.
 // -------------------------
-func NewMonster(name string, icon string, hp, actions int) Monster {
+func NewMonster(name string, icon string, hp, actions int, bps []BodyPart) Monster {
 	c := color.New(color.Underline)
 	return Monster{
 		baseUnit: baseUnit{
@@ -54,7 +54,7 @@ func NewMonster(name string, icon string, hp, actions int) Monster {
 			currentHp: hp,
 			damage:    1,
 			actions:   actions,
-			bodyParts: []string{"Голова", "Торс", "Ноги"},
+			bodyParts: bps,
 		},
 	}
 }
